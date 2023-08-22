@@ -22,6 +22,7 @@ type CmdConfig struct {
 	ClientIDHeader      string
 	RequestMethodHeader string
 	RequestURLHeader    string
+	HeaderName 			string
 }
 
 // NewCmdConfig returns a new command configuration.
@@ -48,7 +49,7 @@ func NewCmdConfig(args []string) (*CmdConfig, error) {
 	app.Flag("metrics-path", "the path where Prometehus metrics will be served.").Default("/metrics").StringVar(&c.MetricsPath)
 	app.Flag("health-check-path", "the path where the health check will be served.").Default("/status").StringVar(&c.HealthCheckPath)
 	app.Flag("pprof-path", "the path where the pprof handlers will be served.").Default("/debug/pprof").StringVar(&c.PprofPath)
-
+	app.Flag("header-name" "the name of the header field").Default("Authorization").StringVar(&c.HeaderName)
 	_, err := app.Parse(args[1:])
 	if err != nil {
 		return nil, err

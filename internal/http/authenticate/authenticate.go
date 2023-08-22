@@ -35,12 +35,12 @@ func (h *HeaderKeys) defaults() {
 }
 
 // New returns an HTTP handler that knows how to authenticate external requests.
-func New(logger log.Logger, metricRec metrics.Recorder, authAppSvc auth.Service, headerKeys HeaderKeys) http.Handler {
+func New(logger log.Logger, metricRec metrics.Recorder, authAppSvc auth.Service, headerName string, headerKeys HeaderKeys) http.Handler {
 	headerKeys.defaults()
 
 	authHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Map request to model.
-		review, err := mapRequestToModel(r, headerKeys)
+		review, err := mapRequestToModel(r, headerName, headerKeys)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			_, err := w.Write([]byte("error mapping request: " + err.Error()))
@@ -82,10 +82,10 @@ func New(logger log.Logger, metricRec metrics.Recorder, authAppSvc auth.Service,
 	return h
 }
 
-func mapRequestToModel(r *http.Request, hk HeaderKeys) (*auth.AuthenticateRequest, error) {
+func mapRequestToModel(r *http.Request, headerName string, hk HeaderKeys) (*auth.AuthenticateRequest, error) {
 	// Headers.
 	const (
-		authorization       = "Authorization"
+		authorization       = headerName
 		authorizationBearer = "Bearer"
 	)
 
