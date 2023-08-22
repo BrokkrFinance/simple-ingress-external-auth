@@ -68,7 +68,7 @@ func TestIntegrationAuthenticate(t *testing.T) {
 			svc := appauth.NewService(log.Noop, metrics.Noop, repo)
 
 			// Run server.
-			handler := httpauthenticate.New(log.Noop, metrics.Noop, svc, httpauthenticate.HeaderKeys{})
+			handler := httpauthenticate.New(log.Noop, metrics.Noop, svc, "Authorization", httpauthenticate.HeaderKeys{})
 			server := httptest.NewServer(handler)
 			defer server.Close()
 

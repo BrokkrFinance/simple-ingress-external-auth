@@ -85,12 +85,11 @@ func New(logger log.Logger, metricRec metrics.Recorder, authAppSvc auth.Service,
 func mapRequestToModel(r *http.Request, headerName string, hk HeaderKeys) (*auth.AuthenticateRequest, error) {
 	// Headers.
 	const (
-		authorization       = headerName
 		authorizationBearer = "Bearer"
 	)
 
 	// Get token.
-	token := r.Header.Get(authorization)
+	token := r.Header.Get(headerName)
 	token = strings.Replace(token, authorizationBearer, "", 1)
 	token = strings.TrimSpace(token)
 
